@@ -1,3 +1,5 @@
+mod tokens;
+
 use core::fmt;
 use std::error;
 use std::fs;
