@@ -105,6 +105,7 @@ impl Lexer {
                 None // nothing tokenized
             }
             '"' => Some(self.stringify()),
+            '0'..='9' => Some(self.numberify()),
             _ => Some(Err(LexerError)),
         }
     }
@@ -141,6 +142,32 @@ impl Lexer {
             Some(lexeme),
             Position(self.start + 1, self.line),
         ))
+    }
+
+    fn numberify(&mut self) -> Result<Token, LexerError> {
+        while let Some(character) = self.peek(1) {
+            if character.is_ascii_digit() {
+                self.next();
+                continue;
+            }
+
+            break;
+        }
+
+        if let Some('.') = self.peek(1) {
+            self.next(); // consume dot
+
+            while let Some(character) = self.peek(1) {
+                if character.is_ascii_digit() {
+                    self.next();
+                    continue;
+                }
+
+                break;
+            }
+        }
+
+        Ok(self.construct(TokenKind::Number))
     }
 
     fn consume(&mut self, kind: TokenKind) -> Token {
