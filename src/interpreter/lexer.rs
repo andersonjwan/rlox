@@ -181,7 +181,32 @@ impl Lexer {
             break;
         }
 
-        Ok(self.construct(TokenKind::Identifier))
+        let lexeme: String = self
+            .source
+            .chars()
+            .skip(self.start)
+            .take(self.current - self.start)
+            .collect();
+
+        match &lexeme[..] {
+            "and" => Ok(self.construct(TokenKind::And)),
+            "class" => Ok(self.construct(TokenKind::Class)),
+            "else" => Ok(self.construct(TokenKind::Else)),
+            "false" => Ok(self.construct(TokenKind::False)),
+            "for" => Ok(self.construct(TokenKind::For)),
+            "fun" => Ok(self.construct(TokenKind::Fun)),
+            "if" => Ok(self.construct(TokenKind::If)),
+            "nil" => Ok(self.construct(TokenKind::Nil)),
+            "or" => Ok(self.construct(TokenKind::Or)),
+            "print" => Ok(self.construct(TokenKind::Print)),
+            "return" => Ok(self.construct(TokenKind::Return)),
+            "super" => Ok(self.construct(TokenKind::Super)),
+            "this" => Ok(self.construct(TokenKind::This)),
+            "true" => Ok(self.construct(TokenKind::True)),
+            "var" => Ok(self.construct(TokenKind::Var)),
+            "while" => Ok(self.construct(TokenKind::While)),
+            _ => Ok(self.construct(TokenKind::Identifier)),
+        }
     }
 
     fn consume(&mut self, kind: TokenKind) -> Token {
