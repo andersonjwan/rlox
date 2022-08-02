@@ -1,4 +1,4 @@
-enum TokenKind {
+pub enum TokenKind {
     // single character tokens
     LeftParen,
     RightParen,
@@ -47,19 +47,16 @@ enum TokenKind {
     EndOfFile,
 }
 
-struct Position {
-    row: usize,
-    col: usize,
-}
+pub struct Position(pub usize, pub usize);
 
-struct Token {
+pub struct Token {
     kind: TokenKind,
-    lexeme: String,
+    lexeme: Option<String>,
     pos: Position,
 }
 
 impl Token {
-    fn new(kind: TokenKind, lexeme: String, pos: Position) -> Token {
+    pub fn new(kind: TokenKind, lexeme: Option<String>, pos: Position) -> Token {
         Token { kind, lexeme, pos }
     }
 }

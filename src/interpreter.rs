@@ -1,4 +1,4 @@
-mod tokens;
+mod lexer;
 
 use core::fmt;
 use std::error;
