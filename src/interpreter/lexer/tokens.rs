@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub enum TokenKind {
     // single character tokens
     LeftParen,
@@ -47,8 +48,10 @@ pub enum TokenKind {
     EndOfFile,
 }
 
+#[derive(Debug)]
 pub struct Position(pub usize, pub usize);
 
+#[derive(Debug)]
 pub struct Token {
     kind: TokenKind,
     lexeme: Option<String>,
