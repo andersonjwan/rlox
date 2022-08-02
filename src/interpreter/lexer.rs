@@ -104,8 +104,43 @@ impl Lexer {
                 self.line += 1;
                 None // nothing tokenized
             }
+            '"' => Some(self.stringify()),
             _ => Some(Err(LexerError)),
         }
+    }
+
+    fn stringify(&mut self) -> Result<Token, LexerError> {
+        while let Some(character) = self.peek(1) {
+            if character != '"' {
+                if character == '\n' {
+                    self.line += 1;
+                }
+
+                self.next();
+                continue;
+            }
+
+            break;
+        }
+
+        self.next();
+
+        if self.end() {
+            return Err(LexerError);
+        }
+
+        let lexeme: String = self
+            .source
+            .chars()
+            .skip(self.start + 1)
+            .take(self.current - 2 - self.start)
+            .collect();
+
+        Ok(Token::new(
+            TokenKind::String,
+            Some(lexeme),
+            Position(self.start + 1, self.line),
+        ))
     }
 
     fn consume(&mut self, kind: TokenKind) -> Token {
