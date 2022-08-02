@@ -106,6 +106,7 @@ impl Lexer {
             }
             '"' => Some(self.stringify()),
             '0'..='9' => Some(self.numberify()),
+            'a'..='z' | 'A'..='Z' | '_' => Some(self.identifierify()),
             _ => Some(Err(LexerError)),
         }
     }
@@ -168,6 +169,19 @@ impl Lexer {
         }
 
         Ok(self.construct(TokenKind::Number))
+    }
+
+    fn identifierify(&mut self) -> Result<Token, LexerError> {
+        while let Some(character) = self.peek(1) {
+            if character.is_alphanumeric() {
+                self.next();
+                continue;
+            }
+
+            break;
+        }
+
+        Ok(self.construct(TokenKind::Identifier))
     }
 
     fn consume(&mut self, kind: TokenKind) -> Token {
