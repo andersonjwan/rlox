@@ -7,6 +7,7 @@ use std::io;
 use std::io::{BufRead, BufReader, Write};
 
 use super::Result as BoxResult;
+use crate::interpreter::lexer::Lexer;
 
 #[derive(Debug)]
 struct InterpreterError;
@@ -52,9 +53,10 @@ pub fn interactive() -> BoxResult<()> {
 }
 
 fn interpret(source: String) -> Result<(), InterpreterError> {
-    if !source.trim().is_empty() {
-        println!("interpreting... \"{}\"", source.trim());
-    }
+    let mut lexer = Lexer::new(source);
+    let stream = lexer.lex();
+
+    println!("{:#?}", stream);
 
     Ok(())
 }
